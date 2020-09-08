@@ -3,7 +3,7 @@ metadata:
 projects:
   - name: console-java-simple
     source:
-      location: 'https://github.com/sblumenstock-doubleSlash/console-java-simple.git'
+      location: 'https://github.com/sblumenstock-doubleSlash/example.git'
       type: git
       branch: java1.11
 components:
