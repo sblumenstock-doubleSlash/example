@@ -70,24 +70,7 @@
     ],
     "name": "java",
     "attributes": {},
-    "commands": [
-      {
-        "commandLine": "mvn -f ${current.project.path} clean install",
-        "name": "console-java-simple: build",
-        "attributes": {
-          "previewUrl": ""
-        },
-        "type": "mvn"
-      },
-      {
-        "commandLine": "mvn -f ${current.project.path} clean install && java -jar ${current.project.path}/target/*.jar",
-        "name": "console-java-simple: run",
-        "attributes": {
-          "previewUrl": ""
-        },
-        "type": "mvn"
-      }
-    ],
+    "commands": [],
     "links": []
   }
 }
