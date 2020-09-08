@@ -1,0 +1,70 @@
+metadata:
+  name: java-maven-vr5vq
+projects:
+  - name: console-java-simple
+    source:
+      location: 'https://github.com/sblumenstock-doubleSlash/console-java-simple.git'
+      type: git
+      branch: java1.11
+components:
+  - id: redhat/java11/latest
+    type: chePlugin
+  - endpoints:
+      - name: ideas-mongodb
+        port: 27017
+        attributes:
+          discoverable: 'true'
+          public: 'false'
+    memoryLimit: 300Mi
+    type: dockerimage
+    volumes:
+      - name: mongodb_data
+        containerPath: /var/lib/mongodb/data
+    alias: mongo
+    image: docker.io/centos/mongodb-36-centos7
+    env:
+      - value: user
+        name: MONGODB_USER
+      - value: password
+        name: MONGODB_PASSWORD
+      - value: ideas
+        name: MONGODB_DATABASE
+      - value: password
+        name: MONGODB_ADMIN_PASSWORD
+  - mountSources: true
+    memoryLimit: 512Mi
+    type: dockerimage
+    volumes:
+      - name: m2
+        containerPath: /home/user/.m2
+    alias: maven
+    image: 'quay.io/eclipse/che-java11-maven:nightly'
+    env:
+      - value: ''
+        name: MAVEN_CONFIG
+      - value: >-
+          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
+          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
+          -Xms20m -Djava.security.egd=file:/dev/./urandom -Duser.home=/home/user
+        name: MAVEN_OPTS
+      - value: >-
+          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
+          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
+          -Xms20m -Djava.security.egd=file:/dev/./urandom
+        name: JAVA_OPTS
+      - value: >-
+          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
+          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
+          -Xms20m -Djava.security.egd=file:/dev/./urandom
+        name: JAVA_TOOL_OPTIONS
+apiVersion: 1.0.0
+commands:
+  - name: maven build and run
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/console-java-simple'
+        type: exec
+        command: mvn clean install && java -jar ./target/*dependencies.jar
+        component: maven
